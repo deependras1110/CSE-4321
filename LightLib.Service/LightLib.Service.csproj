@@ -9,6 +9,15 @@
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="NewFolder1\**" />
+    <Compile Remove="NewFolder2\**" />
+    <EmbeddedResource Remove="NewFolder1\**" />
+    <EmbeddedResource Remove="NewFolder2\**" />
+    <None Remove="NewFolder1\**" />
+    <None Remove="NewFolder2\**" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LightLib.Data\LightLib.Data.csproj" />
     <ProjectReference Include="..\LightLib.Models\LightLib.Models.csproj" />
@@ -17,6 +26,10 @@
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="NLog" Version="4.7.7" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.10.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="NewFolder3\" />
+    <Folder Include="NewFolder\" />
   </ItemGroup>
 
 </Project>
