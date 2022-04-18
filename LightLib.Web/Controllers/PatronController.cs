@@ -9,46 +9,56 @@ using LightLib.Service.Interfaces;
 using LightLib.Web.Models.Patron;
 using Microsoft.AspNetCore.Mvc;
 
-namespace LightLib.Web.Controllers {
-    
-    public class PatronController : LibraryController {
+namespace LightLib.Web.Controllers
+{
+
+    public class PatronController : LibraryController
+    {
         private readonly IPatronService _patronService;
 
-        public PatronController(IPatronService patronService) {
+        public PatronController(IPatronService patronService)
+        {
             _patronService = patronService;
         }
 
-        public async Task<IActionResult> Index([FromQuery] int page = 1, [FromQuery] int perPage = 10) {
-            
+        public async Task<IActionResult> Index([FromQuery] int page = 1, [FromQuery] int perPage = 10)
+        {
+
             var patrons = await _patronService.GetPaginated(page, perPage);
 
-            if (patrons != null && patrons.Results.Any()) {
-                var viewModel = new PatronIndexModel {
+            if (patrons != null && patrons.Results.Any())
+            {
+                var viewModel = new PatronIndexModel
+                {
                     PageOfPatrons = patrons
                 };
 
                 return View(viewModel);
             }
-            
-            var emptyModel = new PatronIndexModel {
-                PageOfPatrons = new PaginationResult<PatronDto> {
+
+            var emptyModel = new PatronIndexModel
+            {
+                PageOfPatrons = new PaginationResult<PatronDto>
+                {
                     Results = new List<PatronDto>(),
                     PerPage = perPage,
                     PageNumber = page
                 }
             };
-            
+
             return View(emptyModel);
         }
 
-        public async Task<IActionResult> Detail(int id) {
+        public async Task<IActionResult> Detail(int id)
+        {
             var patron = await _patronService.Get(id);
             var assetsCheckedOut = await _patronService.GetPaginatedCheckouts(patron.Id, 1, 10);
             var checkoutHistory = await _patronService.GetPaginatedCheckoutHistory(patron.Id, 1, 10);
             var holds = await _patronService.GetPaginatedHolds(patron.Id, 1, 10);
             var memberLengthOfTime = TimeSpanHumanizer.GetReadableTimespan(DateTime.UtcNow - patron.CreatedOn);
 
-            var model = new PatronDetailModel() {
+            var model = new PatronDetailModel()
+            {
                 Id = patron.Id,
                 FirstName = patron.FirstName,
                 LastName = patron.LastName,
@@ -58,13 +68,42 @@ namespace LightLib.Web.Controllers {
                 Telephone = patron.Telephone,
                 HomeLibrary = patron.HomeLibrary,
                 OverdueFees = patron.OverdueFees,
-                AssetsCheckedOut = assetsCheckedOut, 
+                AssetsCheckedOut = assetsCheckedOut,
                 CheckoutHistory = checkoutHistory,
                 Holds = holds,
-                HasBeenMemberFor = memberLengthOfTime 
+                HasBeenMemberFor = memberLengthOfTime
             };
 
             return View(model);
+        }
+
+        public ActionResult Create()
+        {
+            return View();
+        }
+        public ActionResult Edit(int id)
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<bool> AddOrEdit(PatronDto patron)
+        {
+            return await _patronService.Add(patron);
+
+        }
+
+        public async Task<bool> DeletePatron(int? id)
+        {
+            return await _patronService.Delete(id);
+
+
+        }
+
+        [HttpPost]
+        public async Task<bool> EditPatron(PatronDto patron)
+        {
+            return await _patronService.UpdatePatron(patron);
         }
     }
 }

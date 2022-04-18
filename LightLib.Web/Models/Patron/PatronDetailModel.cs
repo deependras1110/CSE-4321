@@ -9,6 +9,8 @@ namespace LightLib.Web.Models.Patron {
         public string LastName { get; set; }
         public int? LibraryCardId { get; set; }
         public string Address { get; set; }
+
+        public DateTime DateOfBirth { get; set; }
         public string Telephone { get; set; }
         public string Email { get; set; }
         public string HomeLibrary { get; set; }

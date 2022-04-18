@@ -88,5 +88,7 @@ namespace LightLib.Web.Controllers {
             await _holdService.PlaceHold(assetGuid, libraryCardId);
             return RedirectToAction("Detail", new {id = assetId});
         }
+
+       
     }
 }

@@ -19,7 +19,7 @@ namespace LightLib.Data {
         public virtual DbSet<AudioCd> AudioCds { get; set; }
         public virtual DbSet<DVD> Dvds { get; set; }
         public virtual DbSet<Hold> Holds { get; set; }
-        public virtual DbSet<Asset> LibraryAssets { get; set; }
+        public virtual DbSet<Asset> LibraryAssets { get; set; }  
         public virtual DbSet<LibraryBranch> LibraryBranches { get; set; }
         public virtual DbSet<LibraryCard> LibraryCards { get; set; }
         public virtual DbSet<Patron> Patrons { get; set; }

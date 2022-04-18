@@ -9,6 +9,7 @@ using LightLib.Models.DTOs;
 using LightLib.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace LightLib.Service.Patrons {
     public class PatronService : IPatronService {
         
@@ -33,8 +34,28 @@ namespace LightLib.Service.Patrons {
         }
 
         public async Task<bool> Add(PatronDto newPatronDto) {
+
             var newPatron = _mapper.Map<Patron>(newPatronDto);
             await _context.AddAsync(newPatron);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        public async Task<bool> UpdatePatron(PatronDto patronDto)
+        {
+            var patrontoUpdate = await _context.Patrons.FirstAsync(p => p.Id == patronDto.Id);
+            _context.Patrons.Remove(patrontoUpdate);
+
+            var newPatron = _mapper.Map<Patron>(patronDto);
+            await _context.AddAsync(newPatron);
+            
+            await _context.SaveChangesAsync();
+            return true;
+
+        }
+        public async Task <bool> Delete(int ? id)
+        {
+            var patron = await _context.Patrons.FindAsync(id);
+            _context.Patrons.Remove(patron);
             await _context.SaveChangesAsync();
             return true;
         }
